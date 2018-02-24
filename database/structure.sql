@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS server;
 CREATE TABLE server (
     alias    TEXT PRIMARY KEY, -- short alias to use from command line
     name     TEXT,             -- full server name (optional)
@@ -9,6 +10,7 @@ CREATE TABLE server (
     mgmt_url TEXT NOT NULL     -- mamenegemt url base path
 );
 
+DROP TABLE IF EXISTS app;
 CREATE TABLE app (
     filename     TEXT NOT NULL,
     server_alias TEXT NOT NULL,

@@ -7,11 +7,11 @@ use v5.20;
 use strictures 2;
 
 sub deploy {
-    say "DEPLOING TOMCAT";
+    say "DEPLOYING TOMCAT";
 }
 
 sub undeploy {
-    say "UNDEPLOING TOMCAT";
+    say "UNDEPLOYING TOMCAT";
 }
 
 __PACKAGE__->meta->make_immutable;

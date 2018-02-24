@@ -6,11 +6,11 @@ use strictures 2;
 with 'Role::Server';
 
 sub deploy {
-    say "DEPLOING WEBLOGIC";
+    say "DEPLOYING WEBLOGIC";
 }
 
 sub undeploy {
-    say "UNDEPLOING WEBLOGIC";
+    say "UNDEPLOYING WEBLOGIC";
 }
 
 __PACKAGE__->meta->make_immutable;

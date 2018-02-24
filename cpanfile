@@ -6,4 +6,6 @@ requires 'DBIx::Class::Schema::Loader';
 requires 'Digest::MD5::File';
 requires 'Moose';
 requires 'MooseX::Singleton';
+requires 'strictures', '>=2';
 requires 'Test::Class::Moose';
+requires 'Test::Most';
