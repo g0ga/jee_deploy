@@ -49,16 +49,16 @@ GetOptions(
 
 %cmd_opts = slice_def({%cmd_opts});
 
-#my $error;
-#if ($command ne 'find'){
-#    for my $key (keys %input_rules) {
-#        if(!$input_rules{$key}->{is_nullable} && !$cmd_opts{$key}){
-#            warn "'--$key' is required for '$command'";
-#            $error++;
-#        }
-#    }
-#}
-#pod2usage(1) if $error;
+my $error;
+if ($command ne 'list'){
+    for my $key (keys %$input_rules) {
+        if(!$input_rules->{$key}->{is_nullable} && !$cmd_opts{$key}){
+            warn "'--$key' is required for '$command'";
+            $error++;
+        }
+    }
+}
+pod2usage(1) if $error;
 p(%cmd_opts);
 
 $module->$command(%cmd_opts);
