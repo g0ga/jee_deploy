@@ -3,7 +3,7 @@ package JEEDeploy::Server::weblogic;
 use Moose;
 use strictures 2;
 
-with 'Role::Server';
+with 'Role::ServerPlugin';
 
 sub deploy {
     say "DEPLOYING WEBLOGIC";

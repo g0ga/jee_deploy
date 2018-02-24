@@ -19,7 +19,6 @@ sub test_startup {
     $dbh->do(read_text("$FindBin::Bin/../database/structure.sql"));
 }
 
-
 sub test_shutdown {
     my $self = shift;
 

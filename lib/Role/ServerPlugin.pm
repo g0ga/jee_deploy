@@ -1,4 +1,4 @@
-package Role::Server;
+package Role::ServerPlugin;
 
 use Moose::Role;
 use strictures 2;

@@ -4,6 +4,7 @@ requires 'DBD::SQLite';
 requires 'DBIx::Class';
 requires 'DBIx::Class::Schema::Loader';
 requires 'Digest::MD5::File';
+requires 'LWP::UserAgent';
 requires 'Moose';
 requires 'MooseX::Singleton';
 requires 'strictures', '>=2';
