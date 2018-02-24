@@ -7,7 +7,8 @@ use v5.20;
 use strictures 2;
 
 use DateTime;
-use Digest::MD5::File qw( file_md5_hex );
+use Digest::MD5::File;
+use JEEDeploy::Env;
 use JEEDeploy::Server;
 
 
@@ -17,13 +18,13 @@ sub deploy {
     die "No target server specified" unless $args{server_alias};
     my $server = JEEDeploy::Server->new(alias => $args{server_alias});
 
-    my $hash = file_md5_hex($args{filename});
+    my $hash = Digest::MD5::File::file_md5_hex($args{filename});
 
     die "Same app version is already deployed to target server"
         if $class->new_from_search(%args, hash => $hash);
 
     $server->deploy($args{filename});
-    $class->add(%args, hash => $hash, datetime => DateTime->now->datetime);
+    $class->modify(%args, hash => $hash, datetime => JEEDeploy::Env->now->strftime('%F %T.%9N'));
 }
 
 sub undeploy {
