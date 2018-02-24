@@ -21,6 +21,7 @@ around BUILDARGS => sub {
         $class->$orig(%args);
     } else {
         my $row = $class->rs->find({%args}, {key => 'primary'});
+        die "$class not found" unless $row;
         return $class->$orig(db_object => $row)
     }
 };
@@ -52,7 +53,7 @@ sub delete {
 sub list {
     my ($class, %args) = @_;
 
-    my @res = $class->search(
+    my @res = $class->rs->search(
         \%args,
         { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
     );
@@ -60,7 +61,7 @@ sub list {
 }
 
 sub rs {
-    my ($self, $hri) = @_;
+    my ($self) = @_;
 
     my $class = ref($self) ? ref($self) : $self;
     $class =~ s/.*:://;
