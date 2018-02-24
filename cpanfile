@@ -1,7 +1,9 @@
+requires 'DateTime';
 requires 'DBI';
 requires 'DBD::SQLite';
 requires 'DBIx::Class';
 requires 'DBIx::Class::Schema::Loader';
+requires 'Digest::MD5::File';
 requires 'Moose';
 requires 'MooseX::Singleton';
 requires 'Test::Class::Moose';

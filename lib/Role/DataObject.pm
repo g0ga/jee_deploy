@@ -1,10 +1,10 @@
 package Role::DataObject;
 
 use Moose::Role;
-
-use v5.20;
 use strictures 2;
 
+use Carp;
+use DDP;
 use JEEDeploy::DB;
 use DBIx::Class::ResultClass::HashRefInflator;
 
@@ -14,33 +14,49 @@ has db_object => (
     required  => 1,
 );
 
-around new => sub {
+around BUILDARGS => sub {
     my ($orig, $class, %args) = @_;
-    if (ref $args{db_object} eq 'DBIx::Class::Row') {
+
+    if (ref($args{db_object}) =~ /JEEDeploy::Schema::Result/) {
         $class->$orig(%args);
     } else {
-        my $row = $class->rs->find_or_new({%args}, {key => 'primary'});
+        my $row = $class->rs->find({%args}, {key => 'primary'});
         return $class->$orig(db_object => $row)
     }
 };
 
-sub fetch {
-    my ($class, @args) = @_;
-
-    my $row = $class->rs->find(@_);
-    return if !$row;
-    return $class->new(db_object => $row)
+sub new_from_search {
+    my ($class, %args) = @_;
+    return map { $class->new(db_object => $_) } $class->rs->search(\%args)->all;
 }
 
-sub store {
-    my ($self, %args) = @_;
+sub add {
+    my ($class, %args) = @_;
 
-    croak 'Called as class method' unless ref $self;
-    $self->db_object->update_or_insert;
+    eval { $class->rs->create(\%args); } or die "Already exists" ;
 }
 
-sub data {
-    return $self->db_object->get_columns;
+sub modify {
+    my ($class, %args) = @_;
+
+    $class->rs->update_or_create(\%args);
+}
+
+sub delete {
+    my ($class, %args) = @_;
+
+    die "No args" unless %args;
+    $class->rs->search(\%args)->delete_all;
+}
+
+sub list {
+    my ($class, %args) = @_;
+
+    my @res = $class->search(
+        \%args,
+        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
+    );
+    p(@res);
 }
 
 sub rs {
@@ -48,13 +64,11 @@ sub rs {
 
     my $class = ref($self) ? ref($self) : $self;
     $class =~ s/.*:://;
+    return JEEDeploy::DB->schema->resultset($class);
+}
 
-    my $server_rs = JEEDeploy::DB->schema->resultset($class);
-    if ($hri){
-        $server_rs->result_class('DBIx::Class::ResultClass::HashRefInflator')
-    }
-
-    return $server_rs;
+sub columns_info {
+    return shift->rs->result_source->columns_info;
 }
 
 1;

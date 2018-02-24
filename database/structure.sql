@@ -12,7 +12,7 @@ CREATE TABLE server (
 CREATE TABLE app (
     filename     TEXT NOT NULL,
     server_alias TEXT NOT NULL,
-    hash         TEXT NOT NULL,
-    date         TEXT NOT NULL,
+    hash         TEXT,
+    datetime     TEXT,
     PRIMARY KEY (filename, server_alias)
 );

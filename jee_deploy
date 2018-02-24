@@ -3,6 +3,65 @@
 use v5.20;
 use strictures 2;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
 
+use Hash::MoreUtils qw(slice_def);
+use Getopt::Long;
+use Pod::Usage;
+use JEEDeploy::Server;
+use JEEDeploy::App;
+use DDP;
+
+
+=head1 NAME
+
+jee_deploy - deploy jee2 apps to application servers
+
+=head1 SYNOPSIS
+
+./jee_deploy server [show|add|list|delete] [--options]
+./jee_deploy app [deploy|remove|list] [--options]
+
+=head1 DESCRIPTION
+
+Deploys .war application to one of following application servers: Tomcat,
+GlassFish, WebLogic
+
+=cut
+
+
+my ($category, $command) = (shift @ARGV, shift @ARGV);
+
+die 'Category is not specified' unless grep {$_ eq $category}  ('server', 'app');
+my $module = 'JEEDeploy::' . ucfirst $category;
+die "Unknown command: $command" unless $module->can($command);
+
+my %cmd_opts;
+my $input_rules = $module->columns_info;
+
+GetOptions(
+    map {
+        my $type = $input_rules->{$_}->{data_type} eq 'text' ? 's' : 'i';
+        ("${_}=$type" => \$cmd_opts{$_})
+    } keys %$input_rules
+) or pod2usage(1);
+
+%cmd_opts = slice_def({%cmd_opts});
+
+#my $error;
+#if ($command ne 'find'){
+#    for my $key (keys %input_rules) {
+#        if(!$input_rules{$key}->{is_nullable} && !$cmd_opts{$key}){
+#            warn "'--$key' is required for '$command'";
+#            $error++;
+#        }
+#    }
+#}
+#pod2usage(1) if $error;
+p(%cmd_opts);
+
+$module->$command(%cmd_opts);
+say "Done";
 
 exit 0;
