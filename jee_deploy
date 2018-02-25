@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+
+use v5.20;
+use strictures 2;
+
+use FindBin;
+
+BEGIN { $ENV{PROJECT_ROOT} = $FindBin::Bin; }
+use lib "$ENV{PROJECT_ROOT}/lib";
+
+use DDP { output => 'stdout' };
+use File::Slurper qw/read_text/;
+use Getopt::Long;
+use Hash::MoreUtils qw(slice_def);
+use Pod::Usage;
+use JEEDeploy::Server;
+use JEEDeploy::App;
+use Cpanel::JSON::XS;
+
+=head1 NAME
+
+jee_deploy - deploy jee2 apps to application servers
+
+=head1 SYNOPSIS
+
+  ./jee_deploy server [add|list|delete] [--alias, --type, --hostname, --port, --mgmt_url, --username, --password]
+  ./jee_deploy app [deploy|undeploy|delete|list|ping] [--filename, --server_alias]
+  ./jee_deploy --config file.json
+  DB_FILE=<external_db_file> ./jee_deploy ...
+
+=head1 DESCRIPTION
+
+Deploys .war application to one of following application servers: Tomcat,
+GlassFish, WebLogic
+
+=cut
+
+my %cmd_opts;
+my @commands;
+my %get_opt_config = ( 'config=s' => \$cmd_opts{config} );
+
+if ($ARGV[0] !~ /^-/) {
+    ($cmd_opts{category}, $cmd_opts{action}) = (shift @ARGV, shift @ARGV);
+
+    my $input_rules
+        = module($cmd_opts{category}, $cmd_opts{action})->columns_info;
+
+    %get_opt_config =  map {
+        my $type = $input_rules->{$_}->{data_type} eq 'int' ? 'i' : 's';
+        ("${_}=$type" => \$cmd_opts{$_});
+    } keys %$input_rules;
+}
+
+GetOptions(%get_opt_config) or pod2usage(1);
+%cmd_opts = slice_def({%cmd_opts});
+
+if($cmd_opts{config}){
+    die "Config file $cmd_opts{config} doesn't exist"
+        unless $cmd_opts{config} =~ /\.json$/ && -e $cmd_opts{config};
+    @commands = @{ decode_json(read_text($cmd_opts{config})) };
+} else {
+    @commands = ( \%cmd_opts );
+}
+
+for my $cmd (@commands) {
+    my $error;
+    my $category    = delete $cmd->{category};
+    my $action      = delete $cmd->{action};
+    my $module      = module($category,$action);
+    my $input_rules = $module->columns_info;
+
+    if ($action ne 'list'){
+        for my $key (keys %$input_rules) {
+            if(!$input_rules->{$key}->{is_nullable} && !$cmd->{$key}){
+                warn "'--$key' is required for '$action'";
+                $error++;
+            }
+        }
+    }
+    pod2usage(1) if $error;
+    say "Running command $module->$action with args:";
+    p %$cmd;
+
+    say "\nResult: ";
+    eval {
+        $module->$action(%cmd_opts); 1;
+    } or do {
+        say "Not Ok"; say $@ if $ENV{DEBUG};
+        exit(1);
+    };
+
+    say "Ok";
+}
+
+exit 0;
+
+sub module {
+    my ($category, $action) = @_;
+
+    die "Wrong category $category"
+        unless $category =~ /^(server|app)$/;
+    my $module = 'JEEDeploy::' . ucfirst $category;
+    die "Unknown action: $cmd_opts{action}"
+        unless $action && $module->can($action);
+
+    return $module;
+}

@@ -4,19 +4,22 @@ use Test::Class::Moose;
 use v5.20;
 use strictures 2;
 
-use File::Slurper 'read_text';
 use FindBin;
 use JEEDeploy::DB;
 use JEEDeploy::Env;
 
-BEGIN { $ENV{TEST} = 1; }
+BEGIN {
+    $ENV{TEST} = 1;
+    $ENV{PROJECT_ROOT} = "$FindBin::Bin/.."
+}
 
 sub test_startup {
     my $self = shift;
 
     $self->next::method;
     my $dbh = JEEDeploy::DB->dbh;
-    $dbh->do(read_text("$FindBin::Bin/../database/structure.sql"));
+    JEEDeploy::DB->seed_db($dbh);
+
 }
 
 sub test_shutdown {

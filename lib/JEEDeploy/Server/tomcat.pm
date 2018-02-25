@@ -6,7 +6,7 @@ with 'Role::ServerPlugin';
 use v5.20;
 use strictures 2;
 
-use DDP;
+use DDP { output => 'stdout' };
 use Data::Dumper;
 use HTTP::Request::Common;
 
@@ -26,7 +26,7 @@ sub deploy {
     );
 
     my $resp = $self->ua->request($req);
-    p $resp;
+    p $resp if $ENV{DEBUG};
     die "Couldn't deploy application" unless $resp->is_success;
 
 }
@@ -41,7 +41,7 @@ sub undeploy {
         $self->server->{password}
     );
     my $resp = $self->ua->request($req);
-    p $resp;
+    p $resp if $ENV{DEBUG};;
     die "Couldn't undeploy application" unless $resp->is_success;
 }
 
@@ -59,7 +59,7 @@ sub path {
     my $path = $filename;
     $path =~ s/^.*\///;
     $path =~ s/\.\w+$//;
-    return $path;
+    return $path if $ENV{DEBUG};;
 }
 
 sub base_url {

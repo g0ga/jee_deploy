@@ -4,7 +4,7 @@ use Moose::Role;
 use strictures 2;
 
 use Carp;
-use DDP;
+use DDP { output => 'stdout' };
 use JEEDeploy::DB;
 use DBIx::Class::ResultClass::HashRefInflator;
 
@@ -57,7 +57,7 @@ sub list {
         \%args,
         { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
     );
-    p(@res);
+    p @res;
 }
 
 sub rs {
