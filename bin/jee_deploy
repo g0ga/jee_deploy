@@ -21,7 +21,7 @@ jee_deploy - deploy jee2 apps to application servers
 =head1 SYNOPSIS
 
 ./jee_deploy server [add|list|delete] [--alias, --type, --hostname, --port, --mgmt_url, --username, --password]
-./jee_deploy app [deploy|undeploy|delete|list] [--filename, --server_alias]
+./jee_deploy app [deploy|undeploy|delete|list|ping] [--filename, --server_alias]
 
 =head1 DESCRIPTION
 
