@@ -14,5 +14,5 @@ rebuild_schema:
 installdeps:
 	@cpanm --installdeps .
 
-installdeps_quick
+installdeps_quick:
 	@cpanm --installdeps --notest --without-recommend --without-suggests .
