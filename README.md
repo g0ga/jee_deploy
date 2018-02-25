@@ -20,6 +20,6 @@ CONTAINER_IP=$(docker container inspect --format '{{ .NetworkSettings.IPAddress 
 docker run -it -d --name perl5 --rm local/perl
 docker exec perl5 bash -c "echo '$CONTAINER_IP tomcat' >> /etc/hosts"
 docker attach perl5
-
+DEBUG=1 ./jee_deploy --config sample_scenario.json
 ```
 
