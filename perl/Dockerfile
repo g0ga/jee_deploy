@@ -6,6 +6,6 @@ RUN apt-get update && \
     git clone https://github.com/g0ga/jee_deploy.git
 
 WORKDIR /root/jee_deploy
-RUN make installdeps
+RUN make
 
 CMD ["bash", "-ls"]
