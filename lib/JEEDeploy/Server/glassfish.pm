@@ -13,4 +13,8 @@ sub undeploy {
     say "UNDEPLOYING GLASSFISH";
 }
 
+sub ping {
+    say "PING GLASSFISH";
+}
+
 __PACKAGE__->meta->make_immutable;

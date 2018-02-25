@@ -13,4 +13,9 @@ sub undeploy {
     say "UNDEPLOYING WEBLOGIC";
 }
 
+sub ping {
+    say "PING WEBLOGIC";
+}
+
+
 __PACKAGE__->meta->make_immutable;

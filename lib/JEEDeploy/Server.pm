@@ -7,6 +7,7 @@ use Module::Load;
 
 sub deploy   { shift->_process('deploy',   @_); }
 sub undeploy { shift->_process('undeploy', @_); }
+sub ping_app { shift->_process('ping_app', @_); }
 
 
 sub _process {
