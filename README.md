@@ -15,8 +15,9 @@ DB_FILE=external_db_file DEBUG=1 ./jee_deploy ...
 ```bash
 docker build -t local/tomcat ./docker/tomcat
 docker build -t local/perl   ./docker/perl
-docker run -d --name tomcat --rm -P local/tomcat
-docker run -it --name perl5 --rm --link tomcat:tomcat local/perl
+docker network create mynet
+docker run -d  --network mynet --name tomcat --rm -p 8080:8080 local/tomcat
+docker run -it --network mynet --name perl5  --rm local/perl
 DEBUG=1 ./jee_deploy --config sample_scenario.json
 ```
 
