@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-all: installdeps rebuild_db rebuild_schema
+all: installdeps_quick rebuild_db rebuild_schema
 
 migrate: rebuild_db rebuild_schema
 
@@ -13,3 +13,6 @@ rebuild_schema:
 
 installdeps:
 	@cpanm --installdeps .
+
+installdeps_quick
+	@cpanm --installdeps --notest --without-recommend --without-suggests .
