@@ -59,9 +59,8 @@ if ($command ne 'list'){
     }
 }
 pod2usage(1) if $error;
-p(%cmd_opts);
 
 $module->$command(%cmd_opts);
-say "Done";
+say "Ok";
 
 exit 0;
