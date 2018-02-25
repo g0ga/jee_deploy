@@ -11,7 +11,6 @@ requires 'File::Slurper';
 requires 'Hash::MoreUtils';
 requires 'LWP::UserAgent';
 requires 'Moose';
-requires 'MooseX::Singleton';
 requires 'Pod::Usage';
 requires 'strictures', '>=2';
 requires 'Test::Class::Moose';
