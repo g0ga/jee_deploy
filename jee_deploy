@@ -26,12 +26,26 @@ jee_deploy - deploy jee2 apps to application servers
   ./jee_deploy server [add|list|delete] [--alias, --type, --hostname, --port, --mgmt_url, --username, --password]
   ./jee_deploy app [deploy|undeploy|delete|list|ping] [--filename, --server_alias]
   ./jee_deploy --config file.json
-  DB_FILE=<external_db_file> ./jee_deploy ...
+  DB_FILE=<external_db_file> DEBUG=1|0 ./jee_deploy ...
 
 =head1 DESCRIPTION
 
 Deploys .war application to one of following application servers: Tomcat,
 GlassFish, WebLogic
+
+=head2 ENV
+
+=over
+
+=item DB_FILE
+
+Override default database where application stores its state.
+
+=item DEBUG
+
+Dump requests and error messages
+
+=back
 
 =cut
 
