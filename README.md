@@ -19,5 +19,6 @@ docker network create mynet
 docker run -d  --network mynet --name tomcat --rm -p 8080:8080 local/tomcat
 docker run -it --network mynet --name perl5  --rm local/perl
 DEBUG=1 ./jee_deploy --config sample_scenario.json
+# then visit http://localhost:8080/sample
 ```
 
