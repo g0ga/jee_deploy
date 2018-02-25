@@ -16,3 +16,6 @@ installdeps:
 
 installdeps_quick:
 	@cpanm --installdeps --notest --without-recommend --without-suggests .
+
+test:
+	@prove -vmr
