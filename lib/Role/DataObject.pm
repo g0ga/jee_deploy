@@ -34,7 +34,7 @@ sub new_from_search {
 sub add {
     my ($class, %args) = @_;
 
-    eval { $class->rs->create(\%args); } or die "Already exists" ;
+    $class->rs->create(\%args);
 }
 
 sub modify {

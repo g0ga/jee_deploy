@@ -27,7 +27,7 @@ sub deploy {
 
     my $resp = $self->ua->request($req);
     p $resp if $ENV{DEBUG};
-    die "Couldn't deploy application" unless $resp->is_success;
+    return $resp->is_success;
 
 }
 
@@ -41,8 +41,8 @@ sub undeploy {
         $self->server->{password}
     );
     my $resp = $self->ua->request($req);
-    p $resp if $ENV{DEBUG};;
-    die "Couldn't undeploy application" unless $resp->is_success;
+    p $resp if $ENV{DEBUG};
+    return $resp->is_success;
 }
 
 sub ping_app {
@@ -50,8 +50,8 @@ sub ping_app {
 
     my $path = $self->path($filename);
     my $resp = $self->ua->get($self->base_url('nomgmt') . $path);
-    p $resp;
-    die "Application is not running" unless $resp->is_success;
+    p $resp if $ENV{DEBUG};
+    return $resp->is_success;
 }
 
 sub path {

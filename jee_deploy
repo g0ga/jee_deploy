@@ -83,7 +83,7 @@ for my $cmd (@commands) {
 
     say "\nResult: ";
     eval {
-        $module->$action(%cmd_opts); 1;
+        $module->$action(%$cmd); 1;
     } or do {
         say "Not Ok"; say $@ if $ENV{DEBUG};
         exit(1);

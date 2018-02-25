@@ -1,0 +1,44 @@
+[
+    {
+        "category" : "server",
+        "action"   : "add",
+        "alias"    : "tomcat_1",
+        "name"     : "Staging Tomcat 1",
+        "type"     : "tomcat",
+        "hostname" : "localhost",
+        "port"     : 8080,
+        "username" : "admin",
+        "password" : "admin",
+        "mgmt_url" : "manager/text"
+    },
+    {
+        "category" : "server",
+        "action"   : "add",
+        "alias"    : "glassfish_1",
+        "name"     : "Staging GlassFish 1",
+        "type"     : "glassfish",
+        "hostname" : "localhost",
+        "port"     : 8888,
+        "username" : "admin1",
+        "password" : "admin1",
+        "mgmt_url" : "manager/text"
+    },
+    {
+        "category"     : "app",
+        "action"       : "deploy",
+        "filename"     : "sample.war",
+        "server_alias" : "glassfish_1"
+    },
+    {
+        "category"     : "app",
+        "action"       : "deploy",
+        "filename"     : "sample.war",
+        "server_alias" : "tomcat_1"
+    },
+    {
+        "category"     : "app",
+        "action"       : "ping",
+        "filename"     : "sample.war",
+        "server_alias" : "tomcat_1"
+    }
+]
