@@ -1,5 +1,5 @@
 # jee_deploy
-Deploy to arbitrary javaapplication server from command line
+Deploy to arbitrary java application server from command line
 
 #### SYNOPSIS
 ./jee_deploy server [add|list|delete] [--alias, --type, --hostname, --port, --mgmt_url, --username, --password]
